@@ -1,12 +1,10 @@
 {
   "name": "correios_rastreio",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "test": "jest --runInBand"
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
@@ -26,13 +24,7 @@
     "express": "^5.1.0",
     "sqlite3": "^5.1.7",
     "swagger-ui-express": "^5.0.1",
-    "winston": "^3.18.3"
-  },
-  "devDependencies": {
-    "eslint": "^9.38.0",
-    "jest": "^30.2.0",
-    "nock": "^14.0.10",
-    "nodemon": "^3.1.10",
-    "supertest": "^7.1.4"
+    "winston": "^3.18.3",
+    "xml2js": "^0.6.2"
   }
 }
