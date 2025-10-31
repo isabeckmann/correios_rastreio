@@ -1,11 +1,16 @@
-import { rastrearEncomenda } from '../services/correiosService.js';
+import { rastrearEncomenda } from "../services/correiosService.js";
 
-export async function getRastreio(req, res) {
+export async function rastrear(req, res) {
+    const { codigo } = req.body;
+
+    if (!codigo) {
+        return res.status(400).json({ erro: "O código de rastreio é obrigatório" });
+    }
+
     try {
-        const { codigo } = req.params;
         const resultado = await rastrearEncomenda(codigo);
-        res.json(resultado);
-    } catch (err) {
-        res.status(500).json({ erro: err.message });
+        return res.json(resultado);
+    } catch (error) {
+        return res.status(error.status || 503).json({ erro: error.message });
     }
 }
