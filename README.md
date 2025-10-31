@@ -29,11 +29,11 @@ Na raiz do projeto, execute:
 npm install express sqlite3 sqlite axios dotenv p-retry
 npm install --save-dev jest nock
 
-## Para o rastreio funcionar, você precisa de uma chave de API real. Crie um arquivo chamado .env na raiz do projeto e insira suas credenciais:
-# .env
-# Porta do Servidor
+### Para o rastreio funcionar, você precisa de uma chave de API real. Crie um arquivo chamado .env na raiz do projeto e insira suas credenciais:
+.env
+//Porta do Servidor
 PORT=3000
-# Credenciais da API Externa
+//Credenciais da API Externa
 RASTREIO_USER="seu_usuario" 
 RASTREIO_TOKEN="<SUA CHAVE API COMPLETA AQUI>" 
 NODE_ENV=development
