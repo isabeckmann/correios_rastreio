@@ -2,9 +2,9 @@ import axios from 'axios';
 import retry from 'p-retry'; 
 import { openDb, salvarHistorico } from '../database/db.js'; 
 
-const RASTREIO_API_URL = 'https://api.linketrack.com/track/json'; 
+const RASTREIO_API_URL = 'https://api-labs.wonca.com.br/wonca.labs.v1.LabsService/Track'; 
 const RASTREIO_USER = process.env.RASTREIO_USER || 'teste'; 
-const RASTREIO_TOKEN = process.env.RASTREIO_TOKEN || '1abcd00b2731640e886fb41a8a9671ad1434c599dbaa0a0de9a5aa619f29a83f'; 
+const API_KEY_TOKEN = process.env.RASTREIO_TOKEN;
 
 export async function calcularFrete({ cepOrigem, cepDestino, peso }) {
     let resultadoAPI;
@@ -28,18 +28,24 @@ export async function calcularFrete({ cepOrigem, cepDestino, peso }) {
 }
 
 async function _realizarRastreio(codigoRastreio) {
-    const url = `${RASTREIO_API_URL}`;
-    
-    const { data } = await axios.get(url, {
-         params: {
-            user: RASTREIO_USER,
-            token: RASTREIO_TOKEN,
-            codigo: codigoRastreio
+    const { data } = await axios.post(
+        'https://api-labs.wonca.com.br/wonca.labs.v1.LabsService/Track',
+        {
+            code: codigoRastreio 
+        },
+        { 
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Apikey ${API_KEY_TOKEN}` 
+            }
         }
-    });
+    );
 
-    if (data.status !== 'success') {
-        throw { status: 404, message: data.message || 'Código de rastreio não encontrado.' };
+    if (!data || data.error) {
+        throw { 
+            status: data.error.code || 404, 
+            message: data.error.message || 'Erro ao rastrear encomenda.'
+        };
     }
     return data;
 }
