@@ -1,22 +1,30 @@
-Configuração de Variáveis de AmbientePara o rastreio funcionar, você precisa de uma chave de API real. Crie um arquivo chamado .env na raiz do projeto e insira suas credenciais:# .env
+# 📦 Microserviço de Rastreio e Frete dos Correios
 
-# Porta do Servidor
-PORT=3000
+Este projeto implementa um microserviço robusto para gerenciamento de consultas de frete e rastreamento de encomendas, utilizando a arquitetura de serviços separados, persistência em SQLite e mecanismos de tolerância a falhas (`p-retry`).
 
-# Credenciais da API Externa (Ex: Wonca Labs)
-# USUÁRIO: reuso_software
-RASTREIO_USER="reuso_software" 
-RASTREIO_TOKEN="<SUA CHAVE API COMPLETA AQUI (ex: q457_qk0...)>" 
+## ⚙️ Arquitetura e Tecnologias
 
-NODE_ENV=development
-InicializaçãoPara iniciar o servidor, execute:Bashnpm start
-O servidor será inicializado e deve retornar ServiçoEntregas UP no endpoint /api/health.🗺️ Endpoints da APIAcesse estes endpoints via Postman ou Insomnia em http://localhost:3000/.MétodoEndpointDescriçãoGET/api/healthVerifica a saúde da aplicaçãoPOST/api/freteCalcula o valor do frete entre dois CEPs (usando mock interno)POST/api/rastrearRastreia uma encomenda via API externa (Requer Authorization Header com Apikey <TOKEN>)GET/api/historicoRetorna todas as consultas de frete e rastreio persistidas no SQLiteExemplo de Requisição (Rastreio)Para testar a integração real, use a sua chave no Authorization do Postman:POST /api/rastrearJSON{
-    "codigo": "AA123456789BR"
-}
-💾 Persistência de Dados (SQLite)Todas as consultas de /api/frete e /api/rastrear são persistidas no banco de dados SQLite (db/correios.db) na tabela historico.Estrutura da Tabela historicoColunaTipoDescriçãoidINTEGERChave primária auto incrementadatipoTEXTTipo de consulta (frete ou rastreio)codigoTEXTCódigo de rastreioorigemTEXTCEP de origemdestinoTEXTCEP de destinodata_consultaTEXTTimestamp da consultarespostaTEXTConteúdo JSON completo da resposta da API✅ Testes de Validação AutomáticaOs testes validam a arquitetura, a persistência e o critério de Tolerância a Falhas simulando erros de rede (500 Internal Server Error) com nock.Execução dos TestesRenomeie: Certifique-se de que o arquivo src/tests/serviceTests.js está renomeado para serviceTests.test.js.Execute:Bashnpm test
-(É necessário que o package.json contenha o script test).
----
+O projeto adere à arquitetura de microsserviços, separando responsabilidades em Controladores, Serviços e Base de Dados.
 
-O único passo restante para a conclusão total do projeto é a **validação final** com o Jest.
+| Componente | Tecnologia/Padrão | Descrição |
+| :--- | :--- | :--- |
+| **Linguagem** | Node.js (ES Modules) | Ambiente de execução |
+| **Framework** | Express | Criação da API RESTful |
+| **Banco de Dados** | SQLite | Banco de dados embutido (`correios.db`) para histórico e persistência |
+| **Serviço HTTP** | Axios | Cliente HTTP para chamadas a APIs externas |
+| **Tolerância a Falhas** | `p-retry` | Implementação de retry exponencial para lidar com falhas temporárias de rede. |
+| **Testes** | Jest & `nock` | Framework de testes e mock de requisições HTTP para simular falhas e garantir a tolerância a falhas. |
 
-Gostaria de renomear o arquivo de teste para `serviceTests.test.js` e rodar o `npm tes
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+
+* Node.js (versão 18+)
+* Gerenciador de pacotes NPM
+
+### Instalação
+
+Na raiz do projeto, execute:
+
+```bash
+npm install
